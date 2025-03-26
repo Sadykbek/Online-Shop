@@ -9,19 +9,21 @@ async function fetchProducts({ pageParam = 0 }) {
 }
 
 export default function Products() {
-  const {
-    data = { pages: [] },
-    error,
-    isLoading,
-    fetchNextPage, // Функция для загрузки следующей страницы
-    hasNextPage,   // Флаг: есть ли ещё данные
-    isFetchingNextPage, // Идёт ли подгрузка
-  } = useInfiniteQuery({
-    queryKey: ["products"],
-    queryFn: fetchProducts,
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => (lastPage.products.length ? lastPage.nextPage : undefined),
-  });
+   const {
+      data = { pages: [] },
+      error,
+      isLoading,
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage,
+    } = useInfiniteQuery({
+      queryKey: ["products"],
+      queryFn: fetchProducts,
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) => (lastPage.products.length ? lastPage.nextPage : undefined),
+      staleTime: 1000 * 60 * 5, 
+    });
+    
 
   useEffect(() => {
     const handleScroll = () => {
