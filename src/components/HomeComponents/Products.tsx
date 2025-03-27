@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 import ProductCard from "./ProductCard";
+import Button from "@mui/material/Button";
 
 async function fetchProducts({ pageParam = 0 }) {
   const { data } = await axios.get(`https://dummyjson.com/products?limit=20&skip=${pageParam}&select=title,price,description,images`);
@@ -23,27 +23,12 @@ export default function Products() {
       getNextPageParam: (lastPage) => (lastPage.products.length ? lastPage.nextPage : undefined),
       staleTime: 1000 * 60 * 5, 
     });
-    
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 &&
-        hasNextPage &&
-        !isFetchingNextPage
-      ) {
-        fetchNextPage();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   if (isLoading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {error.message}</p>;
 
   return (
+    <div>
     <div className="md:grid lg:grid-cols-3 md:grid-cols-2 gap-4">
       {data.pages.map((page) =>
         page.products.map((item: any) => (
@@ -57,7 +42,20 @@ export default function Products() {
         ))
       )}
 
+
       {isFetchingNextPage && <p>Загружаем ещё...</p>}
+    </div>
+    <div className="mt-10">
+        {hasNextPage && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => fetchNextPage()}
+          >
+            Загрузить ещё
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

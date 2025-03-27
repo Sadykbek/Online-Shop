@@ -2,25 +2,13 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Skeleton } from "@mui/material";
 import { useState } from "react";
+import { descriptionCrop } from "./descriptionCrop";
 
 interface ProductProps {
   title: string;
   description: string;
   price: number;
   image?: string;
-}
-function descriptionCrop(text: string): string {
-  if (text.length <= 80) return text;
-
-  const words = text.split(" ");
-  let croppedText = "";
-
-  for (const word of words) {
-    if ((croppedText + word).length > 80) break;
-    croppedText += (croppedText ? " " : "") + word;
-  }
-
-  return croppedText + "...";
 }
 
 export default function ProductCard({
