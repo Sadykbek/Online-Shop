@@ -3,12 +3,14 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import ProductCard from "./ProductCard";
 import Button from "@mui/material/Button";
 
+
 async function fetchProducts({ pageParam = 0 }) {
   const { data } = await axios.get(`https://dummyjson.com/products?limit=20&skip=${pageParam}&select=title,price,description,images`);
   return { ...data, nextPage: pageParam + 20 }; // Добавляем nextPage для пагинации
 }
 
 export default function Products() {
+
    const {
       data = { pages: [] },
       error,
@@ -38,6 +40,7 @@ export default function Products() {
             description={item.description}
             price={+item.price}
             image={item.images[0]}
+            id={item.id}
           />
         ))
       )}

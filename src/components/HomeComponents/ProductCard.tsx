@@ -3,12 +3,15 @@ import Box from "@mui/material/Box";
 import { Skeleton } from "@mui/material";
 import { useState } from "react";
 import { descriptionCrop } from "./descriptionCrop";
+import { useCartStore } from "../../store/useStore";
+
 
 interface ProductProps {
   title: string;
   description: string;
   price: number;
   image?: string;
+  id: number
 }
 
 export default function ProductCard({
@@ -16,13 +19,28 @@ export default function ProductCard({
   description,
   price,
   image,
+  id
 }: ProductProps) {
   const [loading, setLoading] = useState(true);
+  const [isIncart, setIsIncart] = useState(false);
+  function handleAddToCart(product: any) {
+    if(isIncart){
+      setIsIncart(false);
+      return useCartStore.getState().removeFromCart(product);
+
+    }
+    else{
+      useCartStore.getState().addToCart(product);
+      setIsIncart(true);
+    }
+    
+  }
+  
   return (
     <Box
       component={"div"}
-      sx={{ px: 2, py: 1, border: "1px solid #778da9", borderRadius: 2 }}
-    >
+      sx={{ px: 2, py: 1, border: "1px solid #778da9", borderRadius: 2 , position: "relative" }}
+    ><div className="absolute top-0 right-2" onClick={() => handleAddToCart({ title, description, price, image, id })}>{isIncart ? "❌" : "🛒"}</div>
       <div className="h-60 w-full overflow-hidden flex justify-center items-center">
         {loading && (
           <Skeleton variant="rectangular" width="100%" height="100%" />

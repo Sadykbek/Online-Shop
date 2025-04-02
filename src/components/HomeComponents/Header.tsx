@@ -1,6 +1,12 @@
 import { OutlinedInput } from '@mui/material';
 import icon from '/icon.png';
+import Cart from '../cart/Cart';
+import { useState } from 'react';
 export default function Header(){
+   const  [cartOpen, setCartOpen] = useState(false);
+   function closeCart(){
+      setCartOpen(false);
+   }
    return(
       <header className='flex justify-between items-center p-4'>
          <div className='lg:w-10 w-8'>
@@ -8,6 +14,10 @@ export default function Header(){
          </div>
          <div>
             <OutlinedInput placeholder="Поиск" sx={{ width: 300 , px: 1,input: { padding: 1   }}} />
+         </div>
+         <div >
+            <button onClick={() => setCartOpen(!cartOpen)}>Корзина</button>
+            {cartOpen && <Cart close={closeCart} />}
          </div>
          <div>
             <button>Войти</button>
