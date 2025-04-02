@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Skeleton } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { descriptionCrop } from "./descriptionCrop";
 import { useCartStore } from "../../store/useStore";
 
@@ -23,18 +23,24 @@ export default function ProductCard({
 }: ProductProps) {
   const [loading, setLoading] = useState(true);
   const [isIncart, setIsIncart] = useState(false);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const cart = useCartStore((state) => state.cart);
+  
   function handleAddToCart(product: any) {
-    if(isIncart){
+    if (isIncart) {
       setIsIncart(false);
-      return useCartStore.getState().removeFromCart(product);
-
-    }
-    else{
-      useCartStore.getState().addToCart(product);
+      removeFromCart(product);
+    } else {
       setIsIncart(true);
+      addToCart(product);
     }
     
   }
+  useEffect(() => {
+    setIsIncart(cart.some((item) => item.id === id));
+  }, [cart, id]);
+  
   
   return (
     <Box
