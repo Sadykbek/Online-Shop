@@ -1,7 +1,8 @@
 import './App.css'
-import Products from './components/HomeComponents/Products'
+import HomePage from './pages/HomePage';
 import Header from './components/HomeComponents/Header'
 import { Routes, Route, Link } from "react-router-dom";
+import Favorite from './pages/Favorite';
 
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
       <div>
         <Header />
         <Routes>
-          <Route path='/' element={<Products />} />
+          <Route path='/' element={<HomePage/>} />
+          <Route path='/favorite' element={<Favorite/>} />
         </Routes>
       </div>
   )

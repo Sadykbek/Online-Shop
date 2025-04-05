@@ -3,7 +3,9 @@ import Box from "@mui/material/Box";
 import { Skeleton } from "@mui/material";
 import { useState, useEffect } from "react";
 import { descriptionCrop } from "./descriptionCrop";
-import { useCartStore } from "../../store/useStore";
+import { useCartStore, useFavoriteStore } from "../../store/useStore";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
 interface ProductProps {
@@ -21,11 +23,25 @@ export default function ProductCard({
   image,
   id
 }: ProductProps) {
+  const cart = useCartStore((set)=>set.cart)
+  const favorite = useFavoriteStore((set)=> set.products)
   const [loading, setLoading] = useState(true);
-  const [isIncart, setIsIncart] = useState(false);
+  const [isIncart, setIsIncart] = useState(cart.some(item=> item.id == id));
+  const [isFavorite, setIsFavorite] = useState(favorite.some(item=>item.id == id));
+  const toggleFavorite = (product: object) => {
+    if(isFavorite){
+      setIsFavorite(false);
+      removeFromFavorite(product)
+    }
+    else{
+      setIsFavorite(true)
+      addToFavorite(product)
+    }
+  };
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const addToCart = useCartStore((state) => state.addToCart);
-  const cart = useCartStore((state) => state.cart);
+  const addToFavorite = useFavoriteStore(state => state.addToFavorite)
+  const removeFromFavorite = useFavoriteStore(state => state.removeFromFavorite)
   
   function handleAddToCart(product: any) {
     if (isIncart) {
@@ -46,7 +62,7 @@ export default function ProductCard({
     <Box
       component={"div"}
       sx={{ px: 2, py: 1, border: "1px solid #778da9", borderRadius: 2 , position: "relative" }}
-    ><div className="absolute top-0 right-2" onClick={() => handleAddToCart({ title, description, price, image, id })}>{isIncart ? "❌" : "🛒"}</div>
+    ><div className="absolute top-0 right-2">{isFavorite ? <FavoriteIcon color="error" onClick={()=>toggleFavorite({title, price, image, id})} /> : <FavoriteBorderIcon color="error" onClick={()=>toggleFavorite({title, price, image, id})} />}</div>
       <div className="h-60 w-full overflow-hidden flex justify-center items-center">
         {loading && (
           <Skeleton variant="rectangular" width="100%" height="100%" />
@@ -76,8 +92,8 @@ export default function ProductCard({
             <b>Цена:</b> {price} ₽
           </p>
         </div>
-        <Button variant="contained" color="primary">
-          Купить
+        <Button variant="contained" color={isIncart ? "error" : "success"} onClick={() => handleAddToCart({ title, description, price, image, id })}>
+          {isIncart ? "Удалить" : "Добавить"}
         </Button>
       </div>
     </Box>

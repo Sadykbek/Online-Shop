@@ -4,7 +4,7 @@ export default function Cart({close}:any) {
    const removeFromCart = useCartStore((state) => state.removeFromCart);
    const cart = useCartStore((state)=> state.cart);
    return(
-      <div className="absolute top-0 right-20 bg-white border p-4">
+      <div className="fixed z-50 top-0 right-20 bg-white border p-4 ">
          <div className="relative">
             <button className="absolute top-[-20px] right-[-10px]" onClick={()=> close()}>❌</button>
          <h1>Корзина</h1>
