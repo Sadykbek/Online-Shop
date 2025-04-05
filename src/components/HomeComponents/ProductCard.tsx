@@ -3,10 +3,9 @@ import Box from "@mui/material/Box";
 import { Skeleton } from "@mui/material";
 import { useState, useEffect } from "react";
 import { descriptionCrop } from "./descriptionCrop";
-import { useCartStore, useFavoriteStore } from "../../store/useStore";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-
+import { useCartStore } from "../../store/useStore";
+import { useNavigate } from "react-router-dom";
+import ButtonFavorite from "./productCard/ButtonFavorite";
 
 interface ProductProps {
   title: string;
@@ -24,25 +23,10 @@ export default function ProductCard({
   id
 }: ProductProps) {
   const cart = useCartStore((set)=>set.cart)
-  const favorite = useFavoriteStore((set)=> set.products)
   const [loading, setLoading] = useState(true);
   const [isIncart, setIsIncart] = useState(cart.some(item=> item.id == id));
-  const [isFavorite, setIsFavorite] = useState(favorite.some(item=>item.id == id));
-  const toggleFavorite = (product: object) => {
-    if(isFavorite){
-      setIsFavorite(false);
-      removeFromFavorite(product)
-    }
-    else{
-      setIsFavorite(true)
-      addToFavorite(product)
-    }
-  };
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const addToCart = useCartStore((state) => state.addToCart);
-  const addToFavorite = useFavoriteStore(state => state.addToFavorite)
-  const removeFromFavorite = useFavoriteStore(state => state.removeFromFavorite)
-  
   function handleAddToCart(product: any) {
     if (isIncart) {
       setIsIncart(false);
@@ -56,14 +40,20 @@ export default function ProductCard({
   useEffect(() => {
     setIsIncart(cart.some((item) => item.id === id));
   }, [cart, id]);
-  
-  
+  const navigate = useNavigate()
+
+  function handleNav(){
+    navigate(`/product/${id}`)
+  }
+
   return (
     <Box
       component={"div"}
       sx={{ px: 2, py: 1, border: "1px solid #778da9", borderRadius: 2 , position: "relative" }}
-    ><div className="absolute top-0 right-2">{isFavorite ? <FavoriteIcon color="error" onClick={()=>toggleFavorite({title, price, image, id})} /> : <FavoriteBorderIcon color="error" onClick={()=>toggleFavorite({title, price, image, id})} />}</div>
-      <div className="h-60 w-full overflow-hidden flex justify-center items-center">
+    ><div className="absolute top-0 right-2">
+      <ButtonFavorite product={{title, price, image, id}} />
+      </div>
+      <div  onClick={handleNav} className="h-60 w-full overflow-hidden flex justify-center items-center">
         {loading && (
           <Skeleton variant="rectangular" width="100%" height="100%" />
         )}
@@ -79,14 +69,14 @@ export default function ProductCard({
         />
       </div>
 
-      <h3 className="lg:text-2xl md:text-xl text-lg font-semibold text-gray-800">
+      <h3  onClick={handleNav} className="lg:text-2xl md:text-xl text-lg font-semibold text-gray-800">
         {title}
       </h3>
-      <p className="lg:text-base md:text-sm text-xs text-gray-600">
+      <p  onClick={handleNav} className="lg:text-base md:text-sm text-xs text-gray-600">
         {descriptionCrop(description)}
       </p>
 
-      <div className="flex justify-between items-center px-2 mt-2">
+      <div   className="flex justify-between items-center px-2 mt-2">
         <div>
           <p>
             <b>Цена:</b> {price} ₽

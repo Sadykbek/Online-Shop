@@ -48,7 +48,7 @@ export default function Products() {
 
       {isFetchingNextPage && <p>Загружаем ещё...</p>}
     </div>
-    <div className="mt-10">
+    <div className="mt-10 flex justify-center">
         {hasNextPage && (
           <Button
             variant="contained"

@@ -7,7 +7,7 @@ export default function Cart({close}:any) {
    return(
       <div className="fixed z-50 top-0 right-2 bg-white border p-4 w-[450px] rounded">
          <div className="relative">
-            <button className="absolute top-[-10px] right-[-10px]" onClick={()=> close()}><CancelIcon sx={{ fontSize: 30 ,  color: "black"  }}/></button>
+            <button className="absolute top-[-10px] right-[-10px] cursor-pointer" onClick={()=> close()}><CancelIcon sx={{ fontSize: 30 ,  color: "black"  }}/></button>
          <h1>Корзина</h1>
          <div>
             {cart.map((item:any)=>(
