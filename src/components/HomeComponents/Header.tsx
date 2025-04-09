@@ -4,6 +4,8 @@ import Cart from '../cart/Cart';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { AnimatePresence } from "framer-motion";
+
 export default function Header(){
    const navigate = useNavigate();
    function handleClick(){
@@ -25,7 +27,11 @@ export default function Header(){
          </div>
          <div >
             <button onClick={() => setCartOpen(!cartOpen)}>Корзина</button>
-            {cartOpen && <Cart close={closeCart} />}
+            {cartOpen &&  
+            <AnimatePresence>
+              <Cart close={closeCart} />
+            </AnimatePresence>
+            }
             <Link to="/favorite"><button>Избранное</button></Link>
          </div>
          <div>
