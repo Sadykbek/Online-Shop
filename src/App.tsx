@@ -1,6 +1,6 @@
 import HomePage from './pages/HomePage';
 import Header from './components/HomeComponents/Header'
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route} from "react-router-dom";
 import Favorite from './pages/Favorite';
 import ProductPage from './pages/ProductPage';
 
