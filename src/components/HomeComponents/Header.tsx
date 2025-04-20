@@ -35,9 +35,17 @@ export default function Header(){
             }
             <Link to="/favorite"><Box className='cursor-pointer bg-pink-300 hover:bg-pink-100  border-pink-400 border'  p={1} borderRadius={2}>Избранное</Box></Link>
          </div>
-         <div>
-            <button>Войти</button>
-            <button>Регистрация</button>
+         <div className='flex gap-4 items-center'>
+            <Box p={1} className='cursor-pointer bg-green-300 hover:bg-green-100 border rounded border-green-700'>
+               <Link to="/login">
+                  <button>Войти</button>
+               </Link>
+            </Box>
+            <Box p={1} className='cursor-pointer bg-blue-300 hover:bg-blue-100 border rounded border-blue-700'>
+               <Link to="/register">
+                  <button>Регистрация</button>
+               </Link>
+            </Box>
          </div>
       </header>
    )
